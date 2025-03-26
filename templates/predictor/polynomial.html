@@ -1,0 +1,57 @@
+{% extends 'predictor/base.html' %}
+
+{% block title %}Polynomial Regression - Salary Prediction{% endblock %}
+
+{% block header_title %}Polynomial Regression{% endblock %}
+{% block header_subtitle %}Enter your details to predict salary{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form id="predictionForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="experience">Years of Experience</label>
+            <input type="number" id="experience" name="experience" required>
+        </div>
+        <div class="form-group">
+            <label for="education">Education Level (1-4)</label>
+            <input type="number" id="education" name="education" min="1" max="4" required>
+        </div>
+        <div class="form-group">
+            <label for="skills">Number of Skills</label>
+            <input type="number" id="skills" name="skills" required>
+        </div>
+        <button type="submit" class="btn">Predict Salary</button>
+    </form>
+
+    <div class="result" id="result">
+        <h3>Predicted Salary: <span id="predictedSalary"></span></h3>
+    </div>
+
+    <a href="{% url 'home' %}" class="back-btn">← Back to Home</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        
+        try {
+            const response = await fetch('{% url "predict_polynomial" %}', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById('predictedSalary').textContent = `$${data.predicted_salary.toFixed(2)}`;
+            document.getElementById('result').classList.add('show');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while making the prediction.');
+        }
+    });
+</script>
+{% endblock %} 

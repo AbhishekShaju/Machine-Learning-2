@@ -1,0 +1,73 @@
+{% extends 'predictor/base.html' %}
+
+{% block title %}Logistic Regression - Salary Prediction{% endblock %}
+
+{% block header_title %}Logistic Regression{% endblock %}
+{% block header_subtitle %}Enter your details to predict salary range{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form id="predictionForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="experience">Years of Experience</label>
+            <input type="number" id="experience" name="experience" required>
+        </div>
+        <div class="form-group">
+            <label for="education">Education Level</label>
+            <select id="education" name="education" required>
+                <option value="">Select Education Level</option>
+                <option value="1">High School</option>
+                <option value="2">Bachelor's Degree</option>
+                <option value="3">Master's Degree</option>
+                <option value="4">PhD</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="skills">Number of Skills</label>
+            <input type="number" id="skills" name="skills" required>
+        </div>
+        <div class="form-group">
+            <label for="company_size">Company Size</label>
+            <select id="company_size" name="company_size" required>
+                <option value="">Select Company Size</option>
+                <option value="1">Small (1-50)</option>
+                <option value="2">Medium (51-200)</option>
+                <option value="3">Large (201-1000)</option>
+                <option value="4">Enterprise (1000+)</option>
+            </select>
+        </div>
+        <button type="submit" class="btn">Predict Salary Range</button>
+    </form>
+
+    <div class="result" id="result">
+        <h3>Predicted Salary Range: <span id="predictedRange"></span></h3>
+    </div>
+
+    <a href="{% url 'home' %}" class="back-btn">← Back to Home</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        
+        try {
+            const response = await fetch('{% url "predict_logistic" %}', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById('predictedRange').textContent = data.predicted_range;
+            document.getElementById('result').classList.add('show');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while making the prediction.');
+        }
+    });
+</script>
+{% endblock %} 

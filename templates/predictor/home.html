@@ -1,0 +1,25 @@
+{% extends 'predictor/base.html' %}
+
+{% block title %}Home - Salary Prediction System{% endblock %}
+
+{% block content %}
+<div class="techniques-container">
+    <div class="technique-card">
+        <h2>Polynomial Regression</h2>
+        <p>Predict salary using polynomial regression model with multiple features.</p>
+        <a href="{% url 'polynomial' %}" class="btn">Use Polynomial Regression</a>
+    </div>
+
+    <div class="technique-card">
+        <h2>Logistic Regression</h2>
+        <p>Predict salary ranges using logistic regression classification.</p>
+        <a href="{% url 'logistic' %}" class="btn">Use Logistic Regression</a>
+    </div>
+
+    <div class="technique-card">
+        <h2>K-Nearest Neighbors</h2>
+        <p>Predict salary categories using KNN classification algorithm.</p>
+        <a href="{% url 'knn' %}" class="btn">Use K-NN</a>
+    </div>
+</div>
+{% endblock %} 
