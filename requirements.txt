@@ -1,7 +1,7 @@
-django==4.2.7
-numpy==1.21.0
-pandas==1.3.0
-scikit-learn==0.24.2
-joblib==1.0.2 
+django
+numpy
+pandas
+scikit-learn
+joblib
 
 gunicorn
